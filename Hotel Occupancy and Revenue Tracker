@@ -1,0 +1,90 @@
+#include <iostream>
+#include <iomanip>
+#include <string>
+using namespace std;
+
+int floors = 5;
+int maxRoomFloors = 30;
+double singleRate = 60;
+double doubleRate = 75;
+double kingRate = 100;
+double suiteRate = 150;
+
+
+int main()
+{
+    string hotelLocation;
+    int numberFloors, numberRooms;
+    int totalRooms = 0;
+    int occupiedRooms = 0;
+    int unnocupiedRooms;
+    int minRoomFloors = maxRoomFloors + 1, minFloors;
+    double totalIncome = 0, occupancyRate;
+
+    cout << "Welcome to the BlueMont Hotel Program" << endl;
+    cout << "Enter the location of this hotel chain: ";
+    cin >> hotelLocation;
+
+    do {
+        cout << "Enter the number of floors of the hotel: ";
+        cin >> numberFloors;
+    } while (numberFloors < 1 || numberFloors > floors);
+
+    for (int floor = 1; floor <= numberFloors; floor++) {
+        int occupiedSingle, occupiedDouble, occupiedKing, occupiedSuite;
+        do {
+            cout << "Enter the total number of rooms on floor " << floor << ": ";
+            cin >> numberRooms;
+        } while (numberRooms < 1 || numberRooms > maxRoomFloors);
+
+        if (numberRooms < minRoomFloors) {
+            minRoomFloors = numberRooms;
+            minFloors = floor;
+        }
+
+        do {
+            cout << "How many SINGLE rooms are occupied on the " << floor << "th floor: ";
+            cin >> occupiedSingle;
+            cout << "How many DOUBLE rooms are occupied on the " << floor << "th floor: ";
+            cin >> occupiedDouble;
+            cout << "How many KING rooms are occupied on the " << floor << "th floor: ";
+            cin >> occupiedKing;
+            cout << "How many SUITE rooms are occupied on the " << floor << "th floor: ";
+            cin >> occupiedSuite;
+        } while ((occupiedSingle + occupiedDouble + occupiedKing + occupiedSuite) > numberRooms);
+
+        int occupied = occupiedSingle + occupiedDouble + occupiedKing + occupiedSuite;
+        occupiedRooms += occupied;
+        totalRooms += numberRooms;
+
+        double floorIncome = (occupiedSingle * singleRate) + (occupiedDouble * doubleRate) +
+                            (occupiedKing * kingRate) + (occupiedSuite * suiteRate);
+        totalIncome += floorIncome;
+    }
+
+    unnocupiedRooms = totalRooms - occupiedRooms;
+    occupancyRate = (static_cast<double>(occupiedRooms) / totalRooms) * 100;
+
+    cout << fixed << setprecision(2);
+
+    // Display the room rates
+    cout << "===============================================================\n";
+    cout << "\t\tTODAY'S ROOM RATES(US$/night)\n";
+    cout << "Single Room\tDouble Room\tKing Room\tSuite Room\n";
+    cout << "\t60\t\t75\t\t100\t\t150\n";
+    cout << "===============================================================\n";
+    cout << "\nBlueMont Hotel located in " << hotelLocation << endl;
+    cout << "Total Rooms: " << totalRooms << endl;
+    cout << "Total Occupied Rooms: " << occupiedRooms << endl;
+    cout << "Total Unoccupied Rooms: " << unnocupiedRooms << endl;
+    cout << "Occupancy Rate: " << occupancyRate << "%" << endl;
+
+    if (occupancyRate < 60) {
+        cout << "Need to improve Hotel occupancy rate!!" << endl;
+    }
+
+    cout << minFloors << "the Floor with " << minRoomFloors << " rooms, has the least number of rooms." << endl;
+
+    cout << "\nThank you for testing my program!" << endl;
+    return 0;
+}
